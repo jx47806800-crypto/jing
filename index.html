@@ -75,7 +75,7 @@
         </iframe>
     </div>
 
-    <div id="music-status" class="matrix-btn">SYSTEM: SOUND OFF</div>
+    <div id="music-status" class="matrix-btn">turn off</div>
     
     <canvas id="matrix"></canvas>
 
@@ -178,7 +178,7 @@
 				sendYTCommand("setVolume", 50); // 設定音量為 50%，吉他聲更溫柔
 
 				isMusicStarted = true;
-				statusBtn.innerText = "SYSTEM: AUDIO ONLINE";
+				statusBtn.innerText = "turn on";
 				statusBtn.style.boxShadow = "0 0 15px #00ff41";
 			}
 		}, { once: true });
@@ -188,11 +188,11 @@
 			e.stopPropagation();
 			if (isMusicStarted) {
 				sendYTCommand("pauseVideo");
-				statusBtn.innerText = "SYSTEM: AUDIO PAUSED";
+				statusBtn.innerText = "turn off";
 				isMusicStarted = false;
 			} else {
 				sendYTCommand("playVideo");
-				statusBtn.innerText = "SYSTEM: AUDIO ONLINE";
+				statusBtn.innerText = "turn on";
 				isMusicStarted = true;
 			}
 		});
