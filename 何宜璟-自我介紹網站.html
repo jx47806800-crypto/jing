@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>何宜璟的自我介紹</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Microsoft JhengHei", sans-serif;
+            line-height: 1.6;
+            background: black; /* 確保底色是黑的 */
+            overflow-x: hidden;
+        }
+
+        /* Canvas 背景 */
+        #matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* 文字區塊：改成深色透明更有駭客感 */
+        header, section, footer {
+            background-color: rgba(0, 0, 0, 0.8); 
+            padding: 1.5rem 2rem;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 1rem auto;
+            border: 1px solid #00ff41;
+            color: #00ff41;
+        }
+
+        header { text-align: center; }
+
+        nav {
+            background-color: rgba(0, 0, 0, 0.9);
+            border: 1px solid #00ff41;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        nav ul { display: flex; justify-content: center; list-style: none; }
+        nav ul li { margin: 0 1rem; }
+        nav ul li a { color: #00ff41; text-decoration: none; padding: 0.5rem; transition: 0.3s; }
+        nav ul li a:hover { background-color: #00ff41; color: black; border-radius: 5px; }
+
+        section h2 { margin-bottom: 1rem; color: #00ff41; text-shadow: 0 0 5px #00ff41; }
+        .highlight { color: #ff3e3e; font-weight: bold; }
+
+        .matrix-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px;
+            border: 1px solid #00ff41;
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 0 5px #00ff41;
+        }
+    </style>
+</head>
+<body>
+    <div style="display:none">
+        <iframe id="ytPlayer" width="0" height="0" 
+            src="https://www.youtube.com/embed/hjXrL7CuAvc?enablejsapi=1&autoplay=1&loop=1&playlist=hjXrL7CuAvc" 
+            allow="autoplay">
+        </iframe>
+    </div>
+
+    <div id="music-status" class="matrix-btn">SYSTEM: SOUND OFF</div>
+    
+    <canvas id="matrix"></canvas>
+
+    <header>
+        <h1>大家好，我是何宜璟</h1>
+        <p>程式設計愛好者</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#about">關於我</a></li>
+            <li><a href="#skills">技能</a></li>
+            <li><a href="#projects">作品集</a></li>
+            <li><a href="#contact">聯絡我</a></li>
+        </ul>
+    </nav>
+
+    <section id="about">
+        <h2>關於我</h2>
+        <p>我今年14歲，平時喜歡刷程式題目、挑戰新的專案。</p>
+    </section>
+
+    <section id="skills">
+        <h2>技能</h2>
+        <ul>
+            <li>Python <span class="highlight">(ITS py918)</span></li>
+            <li>C++</li>
+            <li>HTML / CSS</li>
+            <li>JavaScript <span class="highlight">(ITS js1000)</span></li>
+        </ul>
+    </section>
+
+    <section id="projects">
+        <h2>作品集</h2>
+        <ul>
+            <li>各種程式刷題成果（ZeroJudge / CSES）</li>
+            <li>現在這個網站</li>
+        </ul>
+    </section>
+
+    <section id="contact">
+        <h2>聯絡我</h2>
+        <p>ig: <a href="https://www.instagram.com/jx47806800/" target="_blank" style="color:#00ff41">何宜璟</a></p>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 何宜璟</p>
+    </footer>
+
+	<script>
+		// 1. Matrix 動畫 (保持你喜歡的原樣)
+		const canvas = document.getElementById('matrix');
+		const ctx = canvas.getContext('2d');
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+		const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
+		const fontSize = 16;
+		const columns = canvas.width / fontSize;
+		const drops = Array(Math.floor(columns)).fill(1);
+
+		function draw() {
+			ctx.fillStyle = 'rgba(0,0,0,0.05)';
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+			ctx.fillStyle = '#0F0';
+			ctx.font = fontSize + 'px monospace';
+			for (let i = 0; i < drops.length; i++) {
+				const text = letters.charAt(Math.floor(Math.random() * letters.length));
+				ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+				if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+				drops[i]++;
+			}
+		}
+		setInterval(draw, 35);
+		window.addEventListener('resize', () => {
+			canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+		});
+
+		// 2. YouTube 控制 (精準修正點擊沒聲音的問題)
+		const ytPlayer = document.getElementById('ytPlayer');
+		const statusBtn = document.getElementById('music-status');
+		let isMusicStarted = false;
+
+		// 定義一個發送指令的函數，增加穩定性
+		function sendYTCommand(func, args = "") {
+			if (ytPlayer && ytPlayer.contentWindow) {
+				ytPlayer.contentWindow.postMessage(JSON.stringify({
+					"event": "command",
+					"func": func,
+					"args": args
+				}), '*');
+			}
+		}
+
+		// 點擊頁面啟動音樂
+		document.addEventListener('click', () => {
+			if (!isMusicStarted) {
+				// 連續發送兩次指令確保成功
+				sendYTCommand("playVideo");
+				sendYTCommand("unMute");
+				sendYTCommand("setVolume", 50); // 設定音量為 50%，吉他聲更溫柔
+
+				isMusicStarted = true;
+				statusBtn.innerText = "SYSTEM: AUDIO ONLINE";
+				statusBtn.style.boxShadow = "0 0 15px #00ff41";
+			}
+		}, { once: true });
+
+		// 按鈕手動開關
+		statusBtn.addEventListener('click', (e) => {
+			e.stopPropagation();
+			if (isMusicStarted) {
+				sendYTCommand("pauseVideo");
+				statusBtn.innerText = "SYSTEM: AUDIO PAUSED";
+				isMusicStarted = false;
+			} else {
+				sendYTCommand("playVideo");
+				statusBtn.innerText = "SYSTEM: AUDIO ONLINE";
+				isMusicStarted = true;
+			}
+		});
+	</script>
+</body>
+</html>
