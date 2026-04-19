@@ -51,31 +51,9 @@
 
         section h2 { margin-bottom: 1rem; color: #00ff41; text-shadow: 0 0 5px #00ff41; }
         .highlight { color: #ff3e3e; font-weight: bold; }
-
-        .matrix-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 10px;
-            border: 1px solid #00ff41;
-            background: rgba(0, 0, 0, 0.8);
-            color: #00ff41;
-            font-family: 'Courier New', monospace;
-            cursor: pointer;
-            z-index: 1000;
-            box-shadow: 0 0 5px #00ff41;
-        }
     </style>
 </head>
 <body>
-    <div style="display:none">
-        <iframe id="ytPlayer" width="0" height="0" 
-            src="https://www.youtube.com/embed/hjXrL7CuAvc?enablejsapi=1&autoplay=1&loop=1&playlist=hjXrL7CuAvc" 
-            allow="autoplay">
-        </iframe>
-    </div>
-
-    <div id="music-status" class="matrix-btn">turn off</div>
     
     <canvas id="matrix"></canvas>
 
@@ -113,6 +91,7 @@
         <ul>
             <li>各種程式刷題成果（ZeroJudge / CSES）</li>
             <li>現在這個網站</li>
+			<li><a href = "https://2026-4-19.vercel.app/">井字遊戲</a><li>
         </ul>
     </section>
 
@@ -125,77 +104,33 @@
         <p>&copy; 2026 何宜璟</p>
     </footer>
 
-	<script>
-		// 1. Matrix 動畫 (保持你喜歡的原樣)
-		const canvas = document.getElementById('matrix');
-		const ctx = canvas.getContext('2d');
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
-		const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
-		const fontSize = 16;
-		const columns = canvas.width / fontSize;
-		const drops = Array(Math.floor(columns)).fill(1);
+    <script>
+        // Matrix 動畫 
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
 
-		function draw() {
-			ctx.fillStyle = 'rgba(0,0,0,0.05)';
-			ctx.fillRect(0, 0, canvas.width, canvas.height);
-			ctx.fillStyle = '#0F0';
-			ctx.font = fontSize + 'px monospace';
-			for (let i = 0; i < drops.length; i++) {
-				const text = letters.charAt(Math.floor(Math.random() * letters.length));
-				ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-				if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-				drops[i]++;
-			}
-		}
-		setInterval(draw, 35);
-		window.addEventListener('resize', () => {
-			canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-		});
-
-		// 2. YouTube 控制 (精準修正點擊沒聲音的問題)
-		const ytPlayer = document.getElementById('ytPlayer');
-		const statusBtn = document.getElementById('music-status');
-		let isMusicStarted = false;
-
-		// 定義一個發送指令的函數，增加穩定性
-		function sendYTCommand(func, args = "") {
-			if (ytPlayer && ytPlayer.contentWindow) {
-				ytPlayer.contentWindow.postMessage(JSON.stringify({
-					"event": "command",
-					"func": func,
-					"args": args
-				}), '*');
-			}
-		}
-
-		// 點擊頁面啟動音樂
-		document.addEventListener('click', () => {
-			if (!isMusicStarted) {
-				// 連續發送兩次指令確保成功
-				sendYTCommand("playVideo");
-				sendYTCommand("unMute");
-				sendYTCommand("setVolume", 50); // 設定音量為 50%，吉他聲更溫柔
-
-				isMusicStarted = true;
-				statusBtn.innerText = "turn on";
-				statusBtn.style.boxShadow = "0 0 15px #00ff41";
-			}
-		}, { once: true });
-
-		// 按鈕手動開關
-		statusBtn.addEventListener('click', (e) => {
-			e.stopPropagation();
-			if (isMusicStarted) {
-				sendYTCommand("pauseVideo");
-				statusBtn.innerText = "turn off";
-				isMusicStarted = false;
-			} else {
-				sendYTCommand("playVideo");
-				statusBtn.innerText = "turn on";
-				isMusicStarted = true;
-			}
-		});
-	</script>
+        function draw() {
+            ctx.fillStyle = 'rgba(0,0,0,0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(draw, 35);
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        });
+    </script>
 </body>
 </html>
