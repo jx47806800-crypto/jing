@@ -5,15 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>何宜璟的自我介紹</title>
     <style>
+        /* 基礎設定 */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: "Microsoft JhengHei", sans-serif;
             line-height: 1.6;
-            background: black; /* 確保底色是黑的 */
+            background: black;
             overflow-x: hidden;
         }
 
-        /* Canvas 背景 */
+        /* Matrix 背景畫布 */
         #matrix {
             position: fixed;
             top: 0;
@@ -23,7 +24,7 @@
             z-index: -1;
         }
 
-        /* 文字區塊：改成深色透明更有駭客感 */
+        /* 區塊通用樣式 */
         header, section, footer {
             background-color: rgba(0, 0, 0, 0.8); 
             padding: 1.5rem 2rem;
@@ -36,6 +37,7 @@
 
         header { text-align: center; }
 
+        /* 導覽列 */
         nav {
             background-color: rgba(0, 0, 0, 0.9);
             border: 1px solid #00ff41;
@@ -43,14 +45,42 @@
             max-width: 800px;
             margin: auto;
         }
-
-        nav ul { display: flex; justify-content: center; list-style: none; }
+        nav ul { 
+            display: flex; 
+            justify-content: center; 
+            list-style: none; /* 移除導覽列點點 */
+        }
         nav ul li { margin: 0 1rem; }
-        nav ul li a { color: #00ff41; text-decoration: none; padding: 0.5rem; transition: 0.3s; }
-        nav ul li a:hover { background-color: #00ff41; color: black; border-radius: 5px; }
+        nav ul li a { 
+            color: #00ff41; 
+            text-decoration: none; 
+            padding: 0.5rem; 
+            transition: 0.3s; 
+        }
+        nav ul li a:hover { 
+            background-color: #00ff41; 
+            color: black; 
+            border-radius: 5px; 
+        }
 
-        section h2 { margin-bottom: 1rem; color: #00ff41; text-shadow: 0 0 5px #00ff41; }
+        /* 內容區清單樣式：移除點點並對齊 */
+        section ul {
+            list-style: none; 
+            padding: 0;
+        }
+        section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        section h2 { 
+            margin-bottom: 1rem; 
+            color: #00ff41; 
+            text-shadow: 0 0 5px #00ff41; 
+        }
+
         .highlight { color: #ff3e3e; font-weight: bold; }
+        
+        a { color: #00ff41; }
     </style>
 </head>
 <body>
@@ -91,13 +121,13 @@
         <ul>
             <li>各種程式刷題成果（ZeroJudge / CSES）</li>
             <li>現在這個網站</li>
-			<li><a href = "https://2026-4-19.vercel.app/">井字遊戲</a><li>
+            <li><a href="https://2026-4-19.vercel.app/" target="_blank">井字遊戲</a></li>
         </ul>
     </section>
 
     <section id="contact">
         <h2>聯絡我</h2>
-        <p>ig: <a href="https://www.instagram.com/jx47806800/" target="_blank" style="color:#00ff41">何宜璟</a></p>
+        <p>IG: <a href="https://www.instagram.com/jx47806800/" target="_blank">何宜璟</a></p>
     </section>
 
     <footer>
@@ -105,31 +135,47 @@
     </footer>
 
     <script>
-        // Matrix 動畫 
+        // Matrix 數位雨動畫特效
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
+        
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+
         const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
         const fontSize = 16;
         const columns = canvas.width / fontSize;
         const drops = Array(Math.floor(columns)).fill(1);
 
         function draw() {
+            // 建立漸層淡出效果
             ctx.fillStyle = 'rgba(0,0,0,0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
             ctx.fillStyle = '#0F0';
             ctx.font = fontSize + 'px monospace';
+
             for (let i = 0; i < drops.length; i++) {
                 const text = letters.charAt(Math.floor(Math.random() * letters.length));
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                
+                // 隨機回到頂部
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
                 drops[i]++;
             }
         }
+
         setInterval(draw, 35);
+
+        // 視窗大小縮放時重新調整畫布
         window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            canvas.width = window.innerWidth; 
+            canvas.height = window.innerHeight;
+            // 重新計算列數以防破圖
+            const newColumns = canvas.width / fontSize;
+            while(drops.length < newColumns) drops.push(1);
         });
     </script>
 </body>
