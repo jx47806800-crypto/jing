@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>何宜璟的自我介紹</title>
     <style>
+        .counter {
+          font-family: 'Courier New', Courier, monospace;
+          color: #00FF41; /* 駭客綠 */
+          border: 1px solid #00FF41;
+          padding: 10px;
+          display: inline-block;
+          background: black;
+          box-shadow: 0 0 10px #00FF41;
+        }
         /* 基礎設定 */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -84,7 +93,23 @@
     </style>
 </head>
 <body>
-    
+    <div class="counter">
+  <p>總瀏覽次數：<span id="visits">載入中...</span></p>
+</div>
+
+<script>
+  // 使用 CountAPI 增加次數並取得回傳值
+  // 將 'your-website-name' 換成你獨有的名稱（例如你的名字）
+  fetch('https://api.countapi.xyz/update/your-website-name/hits?amount=1')
+    .then(res => res.json())
+    .then(res => {
+      document.getElementById('visits').innerText = res.value;
+    })
+    .catch(err => {
+      console.error('計數器錯誤:', err);
+      document.getElementById('visits').innerText = "暫時無法顯示";
+    });
+</script>
     <canvas id="matrix"></canvas>
 
     <header>
