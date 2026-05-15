@@ -93,23 +93,7 @@
     </style>
 </head>
 <body>
-    <div class="counter">
-  <p>總瀏覽次數：<span id="visits">載入中...</span></p>
-</div>
-
-<script>
-  // 使用 CountAPI 增加次數並取得回傳值
-  // 將 'your-website-name' 換成你獨有的名稱（例如你的名字）
-  fetch('https://api.countapi.xyz/update/your-website-name/hits?amount=1')
-    .then(res => res.json())
-    .then(res => {
-      document.getElementById('visits').innerText = res.value;
-    })
-    .catch(err => {
-      console.error('計數器錯誤:', err);
-      document.getElementById('visits').innerText = "暫時無法顯示";
-    });
-</script>
+    
     <canvas id="matrix"></canvas>
 
     <header>
